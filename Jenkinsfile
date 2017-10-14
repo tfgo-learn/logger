@@ -5,7 +5,7 @@ projPath = 'src/github.com/tfgo-learn/logger'
 pipeline {
 	agent {
 		dockerfile {
-			filename 'Dockerfile'
+			filename "${projPath}/Dockerfile"
 		}
 	}
 	stages {
