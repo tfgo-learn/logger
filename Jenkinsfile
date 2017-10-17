@@ -12,7 +12,7 @@ pipeline {
 		stage('build') {
 			steps {
 				withEnv(['GOPATH=' + pwd()]){
-					sh "cd ${projPath} && DEPNOLOCK=1 dep ensure"
+					sh "cd ${projPath} && dep ensure"
 					sh "cd ${projPath} && go build"
 				}
 			}
