@@ -1,7 +1,5 @@
 #!/usr/bin/env groovy
 
-projPath = 'src/github.com/tfgo-learn/logger'
-
 pipeline {
 	agent {
 		docker {
@@ -11,12 +9,17 @@ pipeline {
 	stages {
 		stage('build') {
 			steps {
-				withEnv([
-				    'GOPATH=' + pwd(),
-				    'PATH+EXTRA=' + pwd() + '/bin/' + ':/usr/local/go/bin/'])
-				{
-					sh "go get -u github.com/golang/dep/cmd/dep"
-					sh "cd ${projPath} && dep ensure && go build"
+				script {
+					def projPath = "src/github.com/tfgo-learn/logger"
+					def goPath = pwd()
+
+					withEnv([
+					    "GOPATH=${goPath}",
+					    "PATH+EXTRA=${goPath}/bin:/usr/local/go/bin"])
+					{
+						sh "go get -u github.com/golang/dep/cmd/dep"
+						sh "cd ${projPath} && dep ensure && go build"
+					}				
 				}
 			}
 		}
