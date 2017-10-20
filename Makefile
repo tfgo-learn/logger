@@ -2,7 +2,26 @@ GOFMT ?= gofmt "-s"
 PACKAGES ?= $(shell go list ./... | grep -v /vendor/)
 GOFILES := $(shell find . -name "*.go" -type f -not -path "./vendor/*")
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+    CCFLAGS += -D LINUX
+endif
+ifeq ($(UNAME_S),Darwin)
+    CCFLAGS += -D OSX
+endif
+UNAME_P := $(shell uname -p)
+ifeq ($(UNAME_P),x86_64)
+    CCFLAGS += -D AMD64
+endif
+ifneq ($(filter %86,$(UNAME_P)),)
+    CCFLAGS += -D IA32
+endif
+ifneq ($(filter arm%,$(UNAME_P)),)
+    CCFLAGS += -D ARM
+endif
 
+
+.PHONY: all
 all: deps build test
 
 
@@ -17,6 +36,11 @@ deps:
 .PHONY: build
 build:
 	go build
+
+
+.PHONY: clean
+clean:
+	go clean
 
 
 .PHONY: test
