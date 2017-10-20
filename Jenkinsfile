@@ -17,8 +17,7 @@ pipeline {
 					    "GOPATH=${goPath}",
 					    "PATH+EXTRA=${goPath}/bin:/usr/local/go/bin"])
 					{
-						sh "go get -u github.com/golang/dep/cmd/dep"
-						sh "cd ${projPath} && dep ensure && go build"
+						sh "cd ${projPath} && make"
 					}				
 				}
 			}
