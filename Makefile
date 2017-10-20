@@ -3,9 +3,18 @@ PACKAGES ?= $(shell go list ./... | grep -v /vendor/)
 GOFILES := $(shell find . -name "*.go" -type f -not -path "./vendor/*")
 
 
-all: build
+all: deps build test
 
 
+.PHONY: deps
+deps:
+	@hash dep > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		go get -u github.com/golang/dep/cmd/dep; \
+	fi
+	dep ensure
+
+
+.PHONY: build
 build:
 	go build
 
